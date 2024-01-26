@@ -1,0 +1,53 @@
+esphome:
+  name: water-meter
+  friendly_name: Water Meter 1
+
+esp8266:
+  board: esp01_1m
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "x6w5smPTsEf/8nHQviXK9hm3sQY6MlPHCIIsMlz2FFI="
+
+ota:
+  password: "695a359bde4a23373fae4cfc04f7c497"
+
+wifi:
+  ssid: obiewifi # input your wifi name
+  password: He1senberg # input your wifi passport
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Water-Meter Fallback Hotspot"
+    password: "1KC12Po21nOh"
+
+captive_portal:
+
+sensor:
+  - platform: pulse_counter
+    update_interval: 0.5s
+    id: main_water_meter_pulse_counter
+    pin:
+      number: GPIO4
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    name: "Pulse counter"
+    unit_of_measurement: 'pulses/min'
+    count_mode:
+      rising_edge: DISABLE
+      falling_edge: INCREMENT
+    internal_filter: 50ms
+    
+    total:
+      unit_of_measurement: 'gal'
+      name: "Water Usage"
+      id: main_water_meter_total
+      accuracy_decimals: 0
+      device_class: water
+      state_class: total_increasing
